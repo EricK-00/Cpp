@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 #include <stack>
 #include <queue>
@@ -6,7 +6,8 @@
 
 std::vector<int> adj[1001], r[2];
 bool v[2][1001];
-//int array[5];
+size_t arraySize = 5;
+int* array = new int[arraySize];
 
 enum class typeNum
 {
@@ -85,7 +86,7 @@ void BFS(int V)
     }
 }
 
-void Merge(int array[], int low, int mid, int high)
+void Merge(int low, int mid, int high)
 {
     int l = low;
     int r = mid + 1;
@@ -93,21 +94,20 @@ void Merge(int array[], int low, int mid, int high)
 
     int* temp = new int[high - low + 1];
 
-    while (l < mid + 1 && r < high + 1)
+    while (l <= mid && r <= high)
     {
-        if (array[low] > array[high])
+        if (array[l] > array[r])
             temp[idx++] = array[r++];
         else
             temp[idx++] = array[l++];
     }
-
-    for (int i = l; l < mid + 1; l++)
+    for (; l <= mid;)
     {
-        temp[idx++] = array[i];
+        temp[idx++] = array[l++];
     }
-    for (int i = r; r < high + 1; r++)
+    for (; r <= high;)
     {
-        temp[idx++] = array[i];
+        temp[idx++] = array[r++];
     }
 
     for (int i = 0; i < idx; i++)
@@ -116,31 +116,31 @@ void Merge(int array[], int low, int mid, int high)
     }
 }
 
-void MergeSort(int array[], int low, int high)
+void MergeSort(int low, int high)
 {
     if (low == high) return;
-    int mid = high / 2;
+    int mid = (low + high) / 2;
 
-    MergeSort(array, low, mid);
-    MergeSort(array, mid + 1, high);
-    Merge(array, low, mid, high);
+    MergeSort(low, mid);
+    MergeSort(mid + 1, high);
+    Merge(low, mid, high);
 }
 
 int main()
 {
     std::ios_base::sync_with_stdio(false); std::cin.tie(NULL);
 
-    size_t arraySize = 5;
-    int* array = new int[arraySize];
     //size_t arraySize = _msize(array) / sizeof(*array);
     for (int i = 0; i < arraySize; i++)
     {
         std::cout << "입력(" << i << "): ";
         std::cin >> array[i];
-        std::cout << '\n' << array[i];
     }
 
-    MergeSort(array, 0, arraySize - 1);
+    MergeSort(0, arraySize - 1);
+
+    for (int i = 0; i < arraySize; i++)
+        std::cout << array[i] << ' ';
 
     //int N, M, V;
     //std::cin >> N >> M >> V;
